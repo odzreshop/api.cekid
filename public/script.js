@@ -55,13 +55,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     { name: 'Orkut Mutasi QRIS', slug: 'orkut-mutasi', endpoint: '/api/tools/orderKuota/mutasiQRIS', query: '?username=xxxx&token=xxxx' }
                 ]},
                 { name: 'STALKER', endpoints: [
-                    { name: 'Stalk TikTok', slug: 'stalk-tiktok', endpoint: '/stalk/tiktok', query: '?username=xxxx' },
-                    { name: 'Stalk Free Fire', slug: 'stalk-ff', endpoint: '/stalk/ff', query: '?id=xxxx' },
-                    { name: 'Stalk Mobile Legends', slug: 'stalk-ml', endpoint: '/stalk/ml', query: '?id=xxxx&zoneId=xxxx' },
-                    { name: 'Stalk ML Region', slug: 'stalk-mlregion', endpoint: '/stalk/mlregion', query: '?id=xxxx&zoneId=xxxx' },
-                    { name: 'Stalk ML First Topup', slug: 'stalk-ml-first-topup', endpoint: '/stalk/ml-first-topup', query: '?id=xxxx&zoneId=xxxx' },
-                    { name: 'Stalk Instagram', slug: 'stalk-ig', endpoint: '/stalk/ig', query: '?username=xxxx' },
-                    { name: 'Stalk Roblox', slug: 'stalk-roblox', endpoint: '/stalk/roblox', query: '?nickname=xxxx' }
+                    { name: 'Stalk Free Fire Region', slug: 'stalk-ff-region', endpoint: '/api/games/ffregion', query: '?userId=xxxx' },
+                    { name: 'Stalk Free Fire', slug: 'stalk-ff', endpoint: '/api/games/freefire', query: '?userId=xxxx' },
+                    { name: 'Stalk Genshin Impact', slug: 'stalk-genshin', endpoint: '/api/games/genshin', query: '?uid=xxxx' },
+                    { name: 'Stalk ML Double Diamond', slug: 'stalk-ml-ganda', endpoint: '/api/games/mlganda', query: '?userid=xxxx&zoneid=xxxx' },
+                    { name: 'Stalk Roblox', slug: 'stalk-roblox', endpoint: '/api/games/roblox', query: '?nickname=xxxx' },
+                    { name: 'Stalk PUBG Mobile', slug: 'stalk-pubgm', endpoint: '/api/games/pubgmobile', query: '?userId=xxxx' }
                 ]}
             ];
 
@@ -193,7 +192,8 @@ document.addEventListener('DOMContentLoaded', () => {
             endpointContainer.querySelectorAll('input[type="text"]').forEach(input => {
                 if(input.value) queryParams.set(input.name, input.value);
             });
-            return `${window.location.origin}${ep.endpoint}?${queryParams.toString()}`;
+            const endpointPath = JSON.parse(endpointContainer.dataset.endpointData).endpoint;
+            return `${window.location.origin}${endpointPath}?${queryParams.toString()}`;
         };
         requestUrlDisplay.appendChild(createCopyButton(getProxyUrl));
         const updateRequestUrl = () => { requestUrlPre.textContent = getProxyUrl(); };
@@ -211,12 +211,14 @@ document.addEventListener('DOMContentLoaded', () => {
         loader.style.display = 'flex';
         resultPre.textContent = '';
         copyResultBtn.style.display = 'none';
-        const ep = JSON.parse(container.dataset.endpointData);
+        
         const queryParams = new URLSearchParams();
         container.querySelectorAll('input[type="text"]').forEach(input => {
             if (input.value) queryParams.set(input.name, input.value);
         });
-        const finalUrl = `${ep.endpoint}?${queryParams.toString()}`;
+        const endpointPath = JSON.parse(container.dataset.endpointData).endpoint;
+        const finalUrl = `${endpointPath}?${queryParams.toString()}`;
+
         try {
             const response = await fetch(finalUrl);
             const data = await response.json();
